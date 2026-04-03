@@ -62,6 +62,14 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     iproute2=6.1.0-3 \
     iptables=1.8.9-2 \
     libcap2-bin=1:2.66-4+deb12u2+b2 \
+    # Add GitHub CLI official repository
+    && curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg \
+    && chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg \
+    && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" > /etc/apt/sources.list.d/github-cli.list \
+    # Update apt-get again to pull from the new GitHub repo, then install gh
+    && apt-get update \
+    && apt-get install -y --no-install-recommends gh \
+    # Finally, clean up the apt cache to keep the image size down
     && rm -rf /var/lib/apt/lists/*
 
 # gosu for privilege separation (gateway vs sandbox user).
