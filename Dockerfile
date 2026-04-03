@@ -83,47 +83,47 @@ USER sandbox
 # Build args (NEMOCLAW_MODEL, CHAT_UI_URL) customize per deployment.
 # Auth token is generated per build so each image has a unique token.
 RUN python3 -c "\
-    import base64, json, os, secrets; \
-    from urllib.parse import urlparse; \
-    model = os.environ['NEMOCLAW_MODEL']; \
-    chat_ui_url = os.environ['CHAT_UI_URL']; \
-    provider_key = os.environ['NEMOCLAW_PROVIDER_KEY']; \
-    primary_model_ref = os.environ['NEMOCLAW_PRIMARY_MODEL_REF']; \
-    inference_base_url = os.environ['NEMOCLAW_INFERENCE_BASE_URL']; \
-    inference_api = os.environ['NEMOCLAW_INFERENCE_API']; \
-    inference_compat = json.loads(base64.b64decode(os.environ['NEMOCLAW_INFERENCE_COMPAT_B64']).decode('utf-8')); \
-    parsed = urlparse(chat_ui_url); \
-    chat_origin = f'{parsed.scheme}://{parsed.netloc}' if parsed.scheme and parsed.netloc else 'http://127.0.0.1:18789'; \
-    origins = ['http://127.0.0.1:18789']; \
-    origins = list(dict.fromkeys(origins + [chat_origin])); \
-    disable_device_auth = os.environ.get('NEMOCLAW_DISABLE_DEVICE_AUTH', '') == '1'; \
-    allow_insecure = parsed.scheme == 'http'; \
-    providers = { \
-    provider_key: { \
-    'baseUrl': inference_base_url, \
-    'apiKey': 'unused', \
-    'api': inference_api, \
-    'models': [{**({'compat': inference_compat} if inference_compat else {}), 'id': model, 'name': primary_model_ref, 'reasoning': False, 'input': ['text'], 'cost': {'input': 0, 'output': 0, 'cacheRead': 0, 'cacheWrite': 0}, 'contextWindow': 131072, 'maxTokens': 4096}] \
-    } \
-    }; \
-    config = { \
-    'agents': {'defaults': {'model': {'primary': primary_model_ref}}}, \
-    'models': {'mode': 'merge', 'providers': providers}, \
-    'channels': {'defaults': {'configWrites': False}}, \
-    'gateway': { \
-    'mode': 'local', \
-    'controlUi': { \
-    'allowInsecureAuth': allow_insecure, \
-    'dangerouslyDisableDeviceAuth': disable_device_auth, \
-    'allowedOrigins': origins, \
-    }, \
-    'trustedProxies': ['127.0.0.1', '::1'], \
-    'auth': {'token': secrets.token_hex(32)} \
-    } \
-    }; \
-    path = os.path.expanduser('~/.openclaw/openclaw.json'); \
-    json.dump(config, open(path, 'w'), indent=2); \
-    os.chmod(path, 0o600)"
+import base64, json, os, secrets; \
+from urllib.parse import urlparse; \
+model = os.environ['NEMOCLAW_MODEL']; \
+chat_ui_url = os.environ['CHAT_UI_URL']; \
+provider_key = os.environ['NEMOCLAW_PROVIDER_KEY']; \
+primary_model_ref = os.environ['NEMOCLAW_PRIMARY_MODEL_REF']; \
+inference_base_url = os.environ['NEMOCLAW_INFERENCE_BASE_URL']; \
+inference_api = os.environ['NEMOCLAW_INFERENCE_API']; \
+inference_compat = json.loads(base64.b64decode(os.environ['NEMOCLAW_INFERENCE_COMPAT_B64']).decode('utf-8')); \
+parsed = urlparse(chat_ui_url); \
+chat_origin = f'{parsed.scheme}://{parsed.netloc}' if parsed.scheme and parsed.netloc else 'http://127.0.0.1:18789'; \
+origins = ['http://127.0.0.1:18789']; \
+origins = list(dict.fromkeys(origins + [chat_origin])); \
+disable_device_auth = os.environ.get('NEMOCLAW_DISABLE_DEVICE_AUTH', '') == '1'; \
+allow_insecure = parsed.scheme == 'http'; \
+providers = { \
+provider_key: { \
+'baseUrl': inference_base_url, \
+'apiKey': 'unused', \
+'api': inference_api, \
+'models': [{**({'compat': inference_compat} if inference_compat else {}), 'id': model, 'name': primary_model_ref, 'reasoning': False, 'input': ['text'], 'cost': {'input': 0, 'output': 0, 'cacheRead': 0, 'cacheWrite': 0}, 'contextWindow': 131072, 'maxTokens': 4096}] \
+} \
+}; \
+config = { \
+'agents': {'defaults': {'model': {'primary': primary_model_ref}}}, \
+'models': {'mode': 'merge', 'providers': providers}, \
+'channels': {'defaults': {'configWrites': False}}, \
+'gateway': { \
+'mode': 'local', \
+'controlUi': { \
+'allowInsecureAuth': allow_insecure, \
+'dangerouslyDisableDeviceAuth': disable_device_auth, \
+'allowedOrigins': origins, \
+}, \
+'trustedProxies': ['127.0.0.1', '::1'], \
+'auth': {'token': secrets.token_hex(32)} \
+} \
+}; \
+path = os.path.expanduser('~/.openclaw/openclaw.json'); \
+json.dump(config, open(path, 'w'), indent=2); \
+os.chmod(path, 0o600)"
 
 # Install NemoClaw plugin into OpenClaw
 RUN openclaw doctor --fix > /dev/null 2>&1 || true \
