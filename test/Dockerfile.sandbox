@@ -23,23 +23,23 @@ USER sandbox
 # them and creates subdirectories in the writable data dir.
 RUN mkdir -p /sandbox/.openclaw/workspace /sandbox/.openclaw/extensions /sandbox/.openclaw/skills /sandbox/.openclaw/hooks/demo-hook \
     && printf '%s\n' \
-        '{' \
-        '  "wizard": {' \
-        '    "lastRunAt": "2026-03-14T00:00:00.000Z",' \
-        '    "lastRunVersion": "2026.3.11",' \
-        '    "lastRunCommand": "doctor",' \
-        '    "lastRunMode": "local"' \
-        '  },' \
-        '  "commands": {' \
-        '    "native": "auto",' \
-        '    "nativeSkills": "auto",' \
-        '    "restart": true' \
-        '  },' \
-        '  "meta": {' \
-        '    "lastTouchedVersion": "2026.3.11",' \
-        '    "lastTouchedAt": "2026-03-14T00:00:00.000Z"' \
-        '  }' \
-        '}' > /sandbox/.openclaw/openclaw.json \
+    '{' \
+    '  "wizard": {' \
+    '    "lastRunAt": "2026-03-14T00:00:00.000Z",' \
+    '    "lastRunVersion": "2026.4.2",' \
+    '    "lastRunCommand": "doctor",' \
+    '    "lastRunMode": "local"' \
+    '  },' \
+    '  "commands": {' \
+    '    "native": "auto",' \
+    '    "nativeSkills": "auto",' \
+    '    "restart": true' \
+    '  },' \
+    '  "meta": {' \
+    '    "lastTouchedVersion": "2026.4.2",' \
+    '    "lastTouchedAt": "2026-03-14T00:00:00.000Z"' \
+    '  }' \
+    '}' > /sandbox/.openclaw/openclaw.json \
     && chmod 600 /sandbox/.openclaw/openclaw.json \
     && echo "test-skill" > /sandbox/.openclaw/skills/test.md \
     && echo "test-workspace-file" > /sandbox/.openclaw/workspace/project.md \
@@ -52,31 +52,31 @@ RUN mkdir -p /sandbox/.openclaw/workspace /sandbox/.openclaw/extensions /sandbox
 # - external workspace/agentDir/skills dir under /sandbox/clawd
 # - symlink inside the workspace to verify tar-based preservation
 RUN mkdir -p /sandbox/openclaw-state/extensions /sandbox/openclaw-state/skills /sandbox/openclaw-state/hooks/demo-hook \
-        /sandbox/clawd/main-workspace /sandbox/clawd/main-agent /sandbox/clawd/skills-extra /sandbox/config \
+    /sandbox/clawd/main-workspace /sandbox/clawd/main-agent /sandbox/clawd/skills-extra /sandbox/config \
     && printf '%s\n' \
-        '{' \
-        '  "agents": {' \
-        '    "defaults": {' \
-        '      "workspace": "/sandbox/clawd/main-workspace"' \
-        '    },' \
-        '    "list": [' \
-        '      {' \
-        '        "id": "main",' \
-        '        "workspace": "/sandbox/clawd/main-workspace",' \
-        '        "agentDir": "/sandbox/clawd/main-agent"' \
-        '      }' \
-        '    ]' \
-        '  },' \
-        '  "skills": {' \
-        '    "load": {' \
-        '      "extraDirs": ["/sandbox/clawd/skills-extra"]' \
-        '    }' \
-        '  },' \
-        '  "meta": {' \
-        '    "lastTouchedVersion": "2026.3.11",' \
-        '    "lastTouchedAt": "2026-03-14T00:00:00.000Z"' \
-        '  }' \
-        '}' > /sandbox/config/openclaw.json \
+    '{' \
+    '  "agents": {' \
+    '    "defaults": {' \
+    '      "workspace": "/sandbox/clawd/main-workspace"' \
+    '    },' \
+    '    "list": [' \
+    '      {' \
+    '        "id": "main",' \
+    '        "workspace": "/sandbox/clawd/main-workspace",' \
+    '        "agentDir": "/sandbox/clawd/main-agent"' \
+    '      }' \
+    '    ]' \
+    '  },' \
+    '  "skills": {' \
+    '    "load": {' \
+    '      "extraDirs": ["/sandbox/clawd/skills-extra"]' \
+    '    }' \
+    '  },' \
+    '  "meta": {' \
+    '    "lastTouchedVersion": "2026.4.2",' \
+    '    "lastTouchedAt": "2026-03-14T00:00:00.000Z"' \
+    '  }' \
+    '}' > /sandbox/config/openclaw.json \
     && printf '%s\n' 'external-workspace-file' > /sandbox/clawd/main-workspace/project.md \
     && printf '%s\n' 'shared-notes' > /sandbox/clawd/shared-note.md \
     && ln -s /sandbox/clawd/shared-note.md /sandbox/clawd/main-workspace/shared-link.md \
